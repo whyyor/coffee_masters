@@ -1,3 +1,4 @@
+import 'package:coffee_shop/offerspage.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -83,7 +84,26 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Image.asset("images/logo.png"),
       ),
-      body: const Greet(),
+      bottomNavigationBar: BottomNavigationBar(
+        backgroundColor: Theme.of(context).primaryColor,
+        selectedItemColor: Colors.yellow.shade400,
+        unselectedItemColor: Colors.brown.shade50,
+        items: const [
+          BottomNavigationBarItem(
+            label: "Menu",
+            icon: Icon(Icons.coffee),
+          ),
+          BottomNavigationBarItem(
+            label: "Offers",
+            icon: Icon(Icons.local_offer),
+          ),
+          BottomNavigationBarItem(
+            label: "Order",
+            icon: Icon(Icons.shopping_cart_checkout_outlined),
+          ),
+        ],
+      ),
+      body: const OffersPage(),
     );
   }
 }
