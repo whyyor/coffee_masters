@@ -68,7 +68,7 @@ class Offer extends StatelessWidget {
                     child: Container(
                       color: Colors.amber.shade50,
                       child: Padding(
-                        padding: const EdgeInsets.all(8.0),
+                        padding: const EdgeInsets.all(4.0),
                         child: Text(title,
                             style: Theme.of(context).textTheme.headlineMedium),
                       ),

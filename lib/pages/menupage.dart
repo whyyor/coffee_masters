@@ -11,8 +11,14 @@ class MenuPage extends StatelessWidget {
         id: 1, name: "Dummy Product much larger", price: 1.25, image: "");
     return ListView(
       children: [
-        ProductItem(product: p),
-        ProductItem(product: q),
+        ProductItem(
+          product: p,
+          onAdd: () {},
+        ),
+        ProductItem(
+          product: q,
+          onAdd: () {},
+        ),
       ],
     );
   }
@@ -20,14 +26,15 @@ class MenuPage extends StatelessWidget {
 
 class ProductItem extends StatelessWidget {
   final Product product;
+  final Function onAdd;
   //input property of widget must be declared as final
 
-  const ProductItem({super.key, required this.product});
+  const ProductItem({super.key, required this.product, required this.onAdd});
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.all(8.0),
+      padding: const EdgeInsets.all(8.0),
       child: Card(
         elevation: 4,
         child: Column(
@@ -56,7 +63,9 @@ class ProductItem extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(right: 8.0),
                   child: ElevatedButton(
-                    onPressed: () {},
+                    onPressed: () {
+                      onAdd(product);
+                    },
                     child: const Text("Add"),
                   ),
                 )
