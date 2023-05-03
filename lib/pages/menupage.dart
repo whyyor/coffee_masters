@@ -1,25 +1,58 @@
+import 'package:coffee_shop/pages/datamanager.dart';
 import 'package:flutter/material.dart';
 import '../datamodel.dart';
 
 class MenuPage extends StatelessWidget {
-  const MenuPage({super.key});
+  final DataManager dataManager;
+  const MenuPage({super.key, required this.dataManager});
+  //so it's taking in props but you have to declare the props just like ts
 
   @override
   Widget build(BuildContext context) {
-    var p = Product(id: 1, name: "Dummy Product", price: 1.25, image: "");
-    var q = Product(
-        id: 1, name: "Dummy Product much larger", price: 1.25, image: "");
-    return ListView(
-      children: [
-        ProductItem(
-          product: p,
-          onAdd: () {},
-        ),
-        ProductItem(
-          product: q,
-          onAdd: () {},
-        ),
-      ],
+    return FutureBuilder(
+      future: dataManager.getMenu(),
+      builder: (context, snapshot) {
+        //snapshot is a variable that contain data from future
+        //also have some properties
+        //refer to docs
+        if (snapshot.hasData) {
+          // The future has finished, data is ready
+          var categories = snapshot.data! as List<Category>;
+          return ListView.builder(
+            itemCount: categories.length,
+            itemBuilder: (context, index) {
+              return Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text(categories[index].name),
+                  ),
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: ClampingScrollPhysics(),
+                    //to fix nested listviews we use above
+                    itemCount: categories[index].products.length,
+                    itemBuilder: (context, prodIndex) {
+                      return ProductItem(
+                        product: categories[index].products[prodIndex],
+                        onAdd: () {},
+                      );
+                    },
+                  )
+                ],
+              );
+            },
+          );
+        } else {
+          if (snapshot.hasError) {
+            // Data is not there, because of an error
+            return const Text("There was an error");
+          } else {
+            // Data is in progress (the future didn't finish)
+            return const CircularProgressIndicator();
+          }
+        }
+      },
     );
   }
 }
@@ -40,7 +73,7 @@ class ProductItem extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Image.asset("images/black_coffee.png"),
+          Image.network(product.imageUrl),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
